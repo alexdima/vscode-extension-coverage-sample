@@ -2,6 +2,20 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+export function f(a: number) {
+	const mod3 = (a % 3 === 0);
+	const mod5 = (a % 5 === 0);
+	if (mod3 && mod5) {
+		return 'FizzBuzz';
+	} else if (mod3) {
+		return 'Fizz';
+	} else if (mod5) {
+		return 'Buzz';
+	} else {
+		return String(a);
+	}
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
