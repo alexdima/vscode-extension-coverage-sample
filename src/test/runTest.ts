@@ -1,5 +1,5 @@
 import * as path from 'path';
-
+import { instrument } from './coverage';
 import { runTests } from 'vscode-test';
 
 async function main() {
@@ -10,7 +10,18 @@ async function main() {
 
 		// The path to test runner
 		// Passed to --extensionTestsPath
-		const extensionTestsPath = path.resolve(__dirname, './suite/index');
+		let extensionTestsPath = path.resolve(__dirname, './suite/index');
+
+		if (process.argv.indexOf('--coverage') >= 0) {
+			// generate instrumented files at out-cov
+			instrument();
+
+			// load the instrumented files
+			extensionTestsPath = path.resolve(__dirname, '../../out-cov/test/suite/index');
+
+			// signal that the coverage data should be gathered
+			process.env['GENERATE_COVERAGE'] = '1';
+		}
 
 		// Download VS Code, unzip it and run the integration test
 		await runTests({ extensionDevelopmentPath, extensionTestsPath });
